@@ -2,6 +2,8 @@ package org.vinalynn.wapp.wmblog.service.interfaces;
 
 import org.vinalynn.wapp.wmblog.data.ArticleBean;
 
+import java.util.List;
+
 /**
  * User: caiwm
  * Date: 13-7-29
@@ -30,6 +32,13 @@ public interface IArticleService {
      *
      * @throws Exception
      */
-    public void getArticle() throws Exception;
+    public List<ArticleBean> getArticle() throws Exception;
+
+    /**
+     *
+     * @param uuid
+     * @throws Exception
+     */
+    public ArticleBean getArticleByUuid(String uuid) throws Exception;
 
 }

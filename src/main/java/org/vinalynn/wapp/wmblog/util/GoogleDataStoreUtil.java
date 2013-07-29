@@ -55,25 +55,57 @@ public class GoogleDataStoreUtil {
                         get_GetValueMethod(obj.getClass(), field.getName()).invoke(obj));
             }
         }
+        Field[] dataBeanFields = DataBean.class.getDeclaredFields();
+        if (null != dataBeanFields && dataBeanFields.length > 0) {
+            for (Field field : dataBeanFields) {
+                entity.setProperty(field.getName(),
+                        get_GetValueMethod(DataBean.class, field.getName()).invoke(obj));
+            }
+        }
+
         getDataStore().put(entity);
         return obj.getUuid();
     }
 
-    public static List<DataBean> getDatas(String kind, Class dataClazz, Query.Filter[] filters) throws Exception {
+    /**
+     * 获取数据，根据不同的Kind类别，以及业务对象类型
+     *
+     * @param kind
+     * @param dataClazz
+     * @param filters
+     * @return
+     * @throws Exception
+     */
+    public static <T> List<T> getDatas(String kind, Class<T> dataClazz, Query.Filter[] filters) throws Exception {
+
         Query query = new Query(kind);
+        if (null != filters && filters.length > 0) {
+            query.setFilter(
+                    Query.CompositeFilterOperator.and(filters)
+            );
+        }
         PreparedQuery pq = getDataStore().prepare(query);
-        List<DataBean> destArrays = new ArrayList<DataBean>();
+        List<T> destArrays = new ArrayList<T>();
         for (Entity entity : pq.asIterable()) {
-            DataBean obj = (DataBean) dataClazz.newInstance();
+            T obj = dataClazz.newInstance();
             //set kind
-            obj.setKind(kind);
+            ((DataBean) obj).setKind(kind);
             Field[] fields = dataClazz.getDeclaredFields();
             if (null != fields && fields.length > 0) {
                 for (Field field : fields) {
-                    get_SetValueMethod(field.getName(), obj, new Class<?>[]{field.getType()})
+                    get_SetValueMethod(field.getName(), dataClazz, new Class<?>[]{field.getType()})
                             .invoke(obj, entity.getProperty(field.getName()));
                 }
             }
+
+            Field[] fields2 = DataBean.class.getDeclaredFields();
+            if (null != fields2 && fields2.length > 0) {
+                for (Field field : fields2) {
+                    get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
+                            .invoke(obj, entity.getProperty(field.getName()));
+                }
+            }
+
             destArrays.add(obj);
         }
         return destArrays;
@@ -88,8 +120,8 @@ public class GoogleDataStoreUtil {
         );
     }
 
-    private static Method get_SetValueMethod(String fieldName, Object obj, Class<?>[] paramsType) throws Exception {
-        return obj.getClass().getDeclaredMethod(
+    private static Method get_SetValueMethod(String fieldName, Class<?> clazz, Class<?>[] paramsType) throws Exception {
+        return clazz.getDeclaredMethod(
                 "set" + fieldName.replaceFirst(
                         fieldName.substring(0, 1), fieldName.substring(0, 1).toUpperCase()
                 ),

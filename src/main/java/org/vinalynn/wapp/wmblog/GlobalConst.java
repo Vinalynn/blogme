@@ -16,6 +16,9 @@ public class GlobalConst {
     public static final String KIND_ARTICLE = "Article";
 
 
+    public static final String FILTER_UUID = "uuid";
+
+
     public static interface B_EXCEPTION{
         public static final String INVALID_PARAMS = "invalid params exception.";
     }

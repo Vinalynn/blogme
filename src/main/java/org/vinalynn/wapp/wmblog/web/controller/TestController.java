@@ -1,5 +1,6 @@
 package org.vinalynn.wapp.wmblog.web.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +9,7 @@ import org.vinalynn.wapp.wmblog.data.ArticleBean;
 import org.vinalynn.wapp.wmblog.service.interfaces.IArticleService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * User: caiwm
@@ -30,7 +32,7 @@ public class TestController {
         testSaveSingleObject();
         //getArticle();
 
-        model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY, "This application is coming soon...");
+        model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY, getArticle());
         return GlobalConst.FTL_COMMON_INDEX;
     }
 
@@ -43,8 +45,14 @@ public class TestController {
         this.iArticleService.saveArticleWithUUIDRtn(articleBean);
     }
 
-    private void getArticle() throws Exception {
-        this.iArticleService.getArticle();
+    private String getArticle() throws Exception {
+        List<ArticleBean> list = this.iArticleService.getArticle();
+        if (null == list) return StringUtils.EMPTY;
+        StringBuilder sb = new StringBuilder();
+        for (ArticleBean bean : list) {
+            sb.append(bean.toString());
+        }
+        return sb.toString();
     }
 
 }
