@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class BaseController {
 
-    @RequestMapping(value="/default.html")
-    public String get_DefaultPage(HttpServletRequest request, Model model) throws Exception{
+    @RequestMapping(value = "/default.html")
+    public String get_DefaultPage(HttpServletRequest request, Model model) throws Exception {
         model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY, "This application is coming soon...");
         return GlobalConst.FTL_COMMON_INDEX;
     }

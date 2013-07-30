@@ -20,7 +20,6 @@ public interface IArticleService {
     public void saveArticle(ArticleBean article) throws Exception;
 
     /**
-     *
      * @param articleBean
      * @return
      * @throws Exception
@@ -29,13 +28,11 @@ public interface IArticleService {
 
 
     /**
-     *
      * @throws Exception
      */
     public List<ArticleBean> getArticle() throws Exception;
 
     /**
-     *
      * @param uuid
      * @throws Exception
      */

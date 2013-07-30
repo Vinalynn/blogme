@@ -50,7 +50,7 @@ public class TestController {
         if (null == list) return StringUtils.EMPTY;
         StringBuilder sb = new StringBuilder();
         for (ArticleBean bean : list) {
-            sb.append(bean.toString());
+            sb.append(bean.toString() + "<br>");
         }
         return sb.toString();
     }
