@@ -20,23 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 public class GuestbookController {
 
     /**
-     *
      * @param request
      * @param model
      * @return
      * @throws Exception
      */
-    @RequestMapping(value="/u-info.request")
-    public String t_ServiceUser(HttpServletRequest request, Model model) throws Exception{
+    @RequestMapping(value = "/u-info.request")
+    public String t_ServiceUser(HttpServletRequest request, Model model) throws Exception {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
 
         String loginUrl = userService.createLoginURL(request.getRequestURI());
-        if(null == user){
+        if (null == user) {
             model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY,
-                    "<a href='"+loginUrl+"'> Sign In </a>"
+                    "<a href='" + loginUrl + "'> Sign In </a>"
             );
-        }else{
+        } else {
             model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY,
                     user.getNickname()
             );

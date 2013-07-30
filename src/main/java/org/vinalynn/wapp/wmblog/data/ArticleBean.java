@@ -1,5 +1,8 @@
 package org.vinalynn.wapp.wmblog.data;
 
+import com.google.appengine.api.datastore.Text;
+import org.vinalynn.wapp.wmblog.annotations.GoogleStoreType;
+
 /**
  * User: caiwm
  * Date: 13-7-29
@@ -8,6 +11,7 @@ package org.vinalynn.wapp.wmblog.data;
 public class ArticleBean extends DataBean {
     public String title;
     public String owner;
+    @GoogleStoreType(clazz = Text.class)
     public String content;
 
     public String getTitle() {

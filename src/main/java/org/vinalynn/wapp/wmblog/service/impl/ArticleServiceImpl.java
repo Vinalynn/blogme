@@ -1,5 +1,6 @@
 package org.vinalynn.wapp.wmblog.service.impl;
 
+import com.google.appengine.api.datastore.Query;
 import org.apache.log4j.Logger;
 import org.vinalynn.wapp.wmblog.GlobalConst;
 import org.vinalynn.wapp.wmblog.data.ArticleBean;
@@ -32,11 +33,9 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     @Override
-    public void getArticle() throws Exception {
-        List<DataBean> list = GoogleDataStoreUtil.getDatas(GlobalConst.KIND_ARTICLE, ArticleBean.class, null);
-        if (log.isInfoEnabled()) {
-            log.info(list);
-        }
+    public List<ArticleBean> getArticle() throws Exception {
+        List<ArticleBean> list = GoogleDataStoreUtil.getDatas(GlobalConst.KIND_ARTICLE, ArticleBean.class, null);
+        return (null != list && list.size() > 0) ? list : null;
     }
 
     /**
@@ -52,4 +51,21 @@ public class ArticleServiceImpl implements IArticleService {
         }
         return uuid;
     }
+
+    @Override
+    public ArticleBean getArticleByUuid(String uuid) throws Exception {
+        Query.Filter uuidFilter = new Query.FilterPredicate(
+                GlobalConst.FILTER_UUID,
+                Query.FilterOperator.EQUAL,
+                uuid
+        );
+        List<ArticleBean> l = GoogleDataStoreUtil.getDatas(
+                GlobalConst.KIND_ARTICLE,
+                ArticleBean.class,
+                new Query.Filter[]{uuidFilter}
+        );
+        return (null != l && l.size() > 0) ? l.get(0) : null;
+    }
+
+
 }
