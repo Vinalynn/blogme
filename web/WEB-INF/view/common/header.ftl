@@ -25,7 +25,9 @@
     }
 
     #blog_header #nav-bar li{
-        list-style: none;
+        list-style-type: none;
+        list-style-position: outside;
+        list-style-image: none;
         cursor: pointer;
         display: block;
         float: left;
@@ -34,6 +36,12 @@
         z-index: 999;
         text-align: -webkit-match-parent;
     }
+    #blog_header #nav-bar li:hover{
+        display:block;background:dimgray;filter:alpha(opacity=90);
+        -moz-opacity:.90;
+        opacity:0.9
+    }
+
     #blog_header #nav-bar li a{
         text-decoration: none;
         color: #EEE;
@@ -69,7 +77,7 @@
     </div>
     <div id="nav-bar" class="clearfloat">
         <ul style="margin-left: 8px">
-            <li><a href="#">Home</a></li>
+            <li><a href="#" >Home</a></li>
             <li><a href="#">Coding</a></li>
         </ul>
     </div>

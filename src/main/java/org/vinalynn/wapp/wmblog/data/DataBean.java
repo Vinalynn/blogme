@@ -7,7 +7,7 @@ package org.vinalynn.wapp.wmblog.data;
  */
 public abstract class DataBean {
     private String kind;
-    private String uuid;
+    //private String uuid;
 
     public void setKind(String kind) {
         this.kind = kind;
@@ -17,11 +17,11 @@ public abstract class DataBean {
         return kind;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+//    public String getUuid() {
+//        return uuid;
+//    }
+//
+//    public void setUuid(String uuid) {
+//        this.uuid = uuid;
+//    }
 }

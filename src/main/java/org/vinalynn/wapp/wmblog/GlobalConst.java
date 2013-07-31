@@ -7,7 +7,7 @@ package org.vinalynn.wapp.wmblog;
  */
 public class GlobalConst {
 
-    public static final String FTL_COMMON_INDEX = "common/index";
+    public static final String FTL_COMMON_INDEX = "index";
 
     public static final String FTL_COMMON_MSG_URL = "common/msg";
     public static final String FTL_COMMON_MSG_KEY = "msg";

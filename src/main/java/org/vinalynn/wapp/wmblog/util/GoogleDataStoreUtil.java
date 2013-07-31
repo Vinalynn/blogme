@@ -1,7 +1,6 @@
 package org.vinalynn.wapp.wmblog.util;
 
 import com.google.appengine.api.datastore.*;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.vinalynn.wapp.wmblog.GlobalConst;
 import org.vinalynn.wapp.wmblog.annotations.GoogleStoreType;
@@ -48,9 +47,10 @@ public class GoogleDataStoreUtil {
         if (null == obj) {
             throw new Exception(GlobalConst.B_EXCEPTION.INVALID_PARAMS);
         }
-        obj.setUuid(UUID.randomUUID().toString());
+        //obj.setUuid(UUID.randomUUID().toString());
         KeyRange kr = getDataStore().allocateIds(obj.getKind(), 1);
-        Entity entity = new Entity(kr.getStart());
+        //KeyFactory.createKey(obj.getKind(), UUID.randomUUID().toString());
+        Entity entity = new Entity(KeyFactory.createKey(obj.getKind(), UUID.randomUUID().toString()));
 
         Field[] fields = obj.getClass().getDeclaredFields();
         if (null != fields && fields.length > 0) {
@@ -92,7 +92,9 @@ public class GoogleDataStoreUtil {
         }
 
         getDataStore().put(entity);
-        return obj.getUuid();
+        // key's name is generated-uuid,
+        // this is what will be returned.
+        return entity.getKey().getName();
     }
 
     /**

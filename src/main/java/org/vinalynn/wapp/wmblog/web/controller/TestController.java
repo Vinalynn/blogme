@@ -32,7 +32,7 @@ public class TestController {
         testSaveSingleObject();
         //getArticle();
 
-        model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY, getArticle());
+        //model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY, getArticle());
         return GlobalConst.FTL_COMMON_INDEX;
     }
 

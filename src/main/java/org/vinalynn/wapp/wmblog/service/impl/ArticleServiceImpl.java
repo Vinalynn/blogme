@@ -15,7 +15,7 @@ import java.util.List;
  * <p/>
  * User: caiwm
  * Date: 13-7-29
- * Time: ����5:23
+ * Time:  PM 5:23
  */
 public class ArticleServiceImpl implements IArticleService {
 
