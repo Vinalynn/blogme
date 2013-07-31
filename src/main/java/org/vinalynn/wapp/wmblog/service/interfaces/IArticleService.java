@@ -1,5 +1,6 @@
 package org.vinalynn.wapp.wmblog.service.interfaces;
 
+import com.google.appengine.api.datastore.Query;
 import org.vinalynn.wapp.wmblog.data.ArticleBean;
 
 import java.util.List;
@@ -37,5 +38,19 @@ public interface IArticleService {
      * @throws Exception
      */
     public ArticleBean getArticleByUuid(String uuid) throws Exception;
+
+    /**
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    public List<ArticleBean> getArticles(
+            int page,
+            int pageSize,
+            String sortPName,
+            Query.SortDirection sortDirection
+    ) throws Exception;
 
 }

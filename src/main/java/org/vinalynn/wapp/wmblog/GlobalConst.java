@@ -14,6 +14,7 @@ public class GlobalConst {
 
 
     public static final String KIND_ARTICLE = "Article";
+    public static final String KIND_COMMENTS = "Comments";
 
 
     public static final String FILTER_UUID = "uuid";

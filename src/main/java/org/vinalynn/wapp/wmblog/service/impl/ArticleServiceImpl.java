@@ -1,5 +1,8 @@
 package org.vinalynn.wapp.wmblog.service.impl;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import org.apache.log4j.Logger;
 import org.vinalynn.wapp.wmblog.GlobalConst;
@@ -54,18 +57,30 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public ArticleBean getArticleByUuid(String uuid) throws Exception {
-        Query.Filter uuidFilter = new Query.FilterPredicate(
-                GlobalConst.FILTER_UUID,
-                Query.FilterOperator.EQUAL,
-                uuid
+//        Query.Filter uuidFilter = new Query.FilterPredicate(
+//                GlobalConst.FILTER_UUID,
+//                Query.FilterOperator.EQUAL,
+//                uuid
+//        );
+//        List<ArticleBean> l = GoogleDataStoreUtil.getDatas(
+//                GlobalConst.KIND_ARTICLE,
+//                ArticleBean.class,
+//                new Query.Filter[]{uuidFilter}
+//        );
+//        return (null != l && l.size() > 0) ? l.get(0) : null;
+        return GoogleDataStoreUtil.getDataByKey(
+                KeyFactory.createKey(GlobalConst.KIND_ARTICLE, uuid),
+                ArticleBean.class
         );
-        List<ArticleBean> l = GoogleDataStoreUtil.getDatas(
-                GlobalConst.KIND_ARTICLE,
-                ArticleBean.class,
-                new Query.Filter[]{uuidFilter}
-        );
-        return (null != l && l.size() > 0) ? l.get(0) : null;
     }
 
+    @Override
+    public List<ArticleBean> getArticles(int page, int pageSize,
+                                         String sortPName,
+                                         Query.SortDirection sortDirection) throws Exception {
 
+        Query query = new Query(GlobalConst.KIND_ARTICLE);
+        return GoogleDataStoreUtil.executeQuery(query, page, pageSize, sortPName,
+                sortDirection, null, ArticleBean.class);
+    }
 }

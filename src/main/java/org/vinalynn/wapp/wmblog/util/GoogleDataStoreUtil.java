@@ -15,6 +15,15 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * <p>利用Google DataStore实现的数据持久化工具，主要功能有：
+ * <ul>
+ * <li>1、JavaBean自助转换Entity，对于特殊字段实现注解解释功能。</li>
+ * <li>2、支持分页查询数据，支持自定义排序。</li>
+ * </ul>
+ *
+ *
+ * </p>
+ *
  * User: caiwm
  * Date: 13-7-29
  * Time: 下午5:01
@@ -110,6 +119,117 @@ public class GoogleDataStoreUtil {
     }
 
     /**
+     * @param query
+     * @param page
+     * @param pageSize
+     * @param sortPName
+     * @param sortType
+     * @return
+     * @throws Exception
+     */
+    public static List<Entity> executeQuery(Query query, int page, int pageSize,
+                                            String sortPName, Query.SortDirection sortType,
+                                            Query.Filter[] filters) throws Exception {
+        if (null != filters) {
+            query.setFilter(Query.CompositeFilterOperator.and(filters));
+        }
+        if (StringUtils.isNotEmpty(sortPName) && sortType != null) {
+            query.addSort(sortPName, sortType);
+        }
+        PreparedQuery pq = getDataStore().prepare(query);
+        return pq.asList(FetchOptions.Builder.withOffset(page * pageSize).limit(pageSize));
+    }
+
+    /**
+     * @param query
+     * @param page
+     * @param pageSize
+     * @param sortPName
+     * @param sortType
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T> List<T> executeQuery(Query query, int page, int pageSize,
+                                           String sortPName, Query.SortDirection sortType,
+                                           Query.Filter[] filters, Class<T> clazz) throws Exception {
+        List<Entity> eResults = executeQuery(query, page, pageSize, sortPName, sortType, filters);
+        List<T> tResults = null;
+        if (null != eResults && eResults.size() > 0) {
+            tResults = new ArrayList<T>();
+            for (Entity entity : eResults) {
+                tResults.add(makeUpBean(clazz, entity));
+            }
+        }
+        return tResults;
+    }
+
+    /**
+     * @param key
+     * @param dataClazz
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T> T getDataByKey(Key key, Class<T> dataClazz) throws Exception {
+        Entity entity = getDataStore().get(key);
+        return makeUpBean(dataClazz, entity);
+    }
+
+    /**
+     * @param clazz
+     * @param entity
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    private static <T> T makeUpBean(Class<T> clazz, Entity entity) throws Exception {
+
+        Field[] fields = clazz.getDeclaredFields();
+        if (null == fields || fields.length < 1) {
+            return null;
+        }
+        if (null == entity) return null;
+
+        T obj = clazz.newInstance();
+
+        ((DataBean) obj).setKind(entity.getKind());
+        for (Field field : fields) {
+            if (null == entity.getProperty(field.getName()))
+                continue;
+            if (hasAnnotationOfPointedType(field, Text.class)) {
+                Object e_obj = entity.getProperty(field.getName());
+                get_SetValueMethod(field.getName(), clazz, new Class<?>[]{field.getType()})
+                        .invoke(obj, ((Text) e_obj).getValue());
+            } else {
+                get_SetValueMethod(field.getName(), clazz, new Class<?>[]{field.getType()})
+                        .invoke(obj, entity.getProperty(field.getName()));
+            }
+        }
+
+        fields = DataBean.class.getDeclaredFields();
+        if (null != fields && fields.length > 0) {
+            for (Field field : fields) {
+                if (hasAnnotationOfPointedType(field, Text.class)) {
+                    Object e_obj = entity.getProperty(field.getName());
+                    get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
+                            .invoke(obj, ((Text) e_obj).getValue());
+                } else if (hasAnnotationOfNoSave(field)) {
+                    //把UUID从Entity的主键中读取出来，设置到DataBean的uuid成员变量中
+                    if (StringUtils.equals("uuid", field.getName())) {
+                        ((DataBean) obj).setUuid(entity.getKey().getName());
+                    }
+                } else {
+                    get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
+                            .invoke(obj, entity.getProperty(field.getName()));
+                }
+            }
+        }
+        return obj;
+    }
+
+    /**
      * 获取数据，根据不同的Kind类别，以及业务对象类型
      *
      * @param kind
@@ -163,7 +283,6 @@ public class GoogleDataStoreUtil {
                     }
                 }
             }
-
             destArrays.add(obj);
         }
         return destArrays;
