@@ -1,7 +1,5 @@
 package org.vinalynn.wapp.wmblog.annotations;
 
-import com.google.appengine.api.datastore.Text;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,7 +16,9 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.LOCAL_VARIABLE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface GoogleStoreType {
+public @interface GoogleStoreAction {
     //
-    Class<?> clazz() default Text.class;
+    Class<?> storeType() default Object.class;
+
+    boolean noSave() default false;
 }

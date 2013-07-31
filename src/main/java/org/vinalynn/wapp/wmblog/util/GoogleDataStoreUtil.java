@@ -1,9 +1,10 @@
 package org.vinalynn.wapp.wmblog.util;
 
 import com.google.appengine.api.datastore.*;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.vinalynn.wapp.wmblog.GlobalConst;
-import org.vinalynn.wapp.wmblog.annotations.GoogleStoreType;
+import org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction;
 import org.vinalynn.wapp.wmblog.data.DataBean;
 
 import java.lang.annotation.Annotation;
@@ -48,28 +49,39 @@ public class GoogleDataStoreUtil {
             throw new Exception(GlobalConst.B_EXCEPTION.INVALID_PARAMS);
         }
         //obj.setUuid(UUID.randomUUID().toString());
-        KeyRange kr = getDataStore().allocateIds(obj.getKind(), 1);
+        //KeyRange kr = getDataStore().allocateIds(obj.getKind(), 1);
         //KeyFactory.createKey(obj.getKind(), UUID.randomUUID().toString());
-        Entity entity = new Entity(KeyFactory.createKey(obj.getKind(), UUID.randomUUID().toString()));
+        Entity entity;
+        if (StringUtils.isNotEmpty(obj.getUuid())) {
+            entity = new Entity(KeyFactory.createKey(obj.getKind(), obj.getUuid()));
+        } else {
+            entity = new Entity(KeyFactory.createKey(obj.getKind(), UUID.randomUUID().toString()));
+        }
 
         Field[] fields = obj.getClass().getDeclaredFields();
         if (null != fields && fields.length > 0) {
             for (Field field : fields) {
-                boolean storedAsPointedType = Boolean.FALSE;
+                //boolean storedAsPointedType = Boolean.FALSE;
                 if (hasAnnotationOfPointedType(field, Text.class)) {
                     Text text = new Text(
                             String.valueOf(get_GetValueMethod(obj.getClass(),
                                     field.getName()).invoke(obj))
                     );
                     entity.setProperty(field.getName(), text);
-                    storedAsPointedType = Boolean.TRUE;
+                    //storedAsPointedType = Boolean.TRUE;
+                } //else if(hasAnnotationOfNoSave(field)){
+                //  continue;
+                else {
+                    entity.setProperty(field.getName(),
+                            get_GetValueMethod(obj.getClass(), field.getName()).invoke(obj));
                 }
+
 
 //                Annotation[] annotations = field.getDeclaredAnnotations();
 //                if (null != annotations && annotations.length > 0) {
 //                    for (Annotation annotation : annotations) {
-//                        if (annotation instanceof GoogleStoreType) {
-//                            GoogleStoreType a = (GoogleStoreType) annotation;
+//                        if (annotation instanceof GoogleStoreAction) {
+//                            GoogleStoreAction a = (GoogleStoreAction) annotation;
 //                            if (StringUtils.equals(a.clazz().getName(), Text.class.getName())) {
 //
 //                            }
@@ -77,20 +89,20 @@ public class GoogleDataStoreUtil {
 //                        }
 //                    }
 //                }
-                if (!storedAsPointedType) {
-                    entity.setProperty(field.getName(),
-                            get_GetValueMethod(obj.getClass(), field.getName()).invoke(obj));
-                }
+                //if (!storedAsPointedType) {
+
+                //}
             }
         }
         Field[] dataBeanFields = DataBean.class.getDeclaredFields();
         if (null != dataBeanFields && dataBeanFields.length > 0) {
             for (Field field : dataBeanFields) {
-                entity.setProperty(field.getName(),
-                        get_GetValueMethod(DataBean.class, field.getName()).invoke(obj));
+                if (!hasAnnotationOfNoSave(field)) {
+                    entity.setProperty(field.getName(),
+                            get_GetValueMethod(DataBean.class, field.getName()).invoke(obj));
+                }
             }
         }
-
         getDataStore().put(entity);
         // key's name is generated-uuid,
         // this is what will be returned.
@@ -140,6 +152,11 @@ public class GoogleDataStoreUtil {
                         Object e_obj = entity.getProperty(field.getName());
                         get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
                                 .invoke(obj, ((Text) e_obj).getValue());
+                    } else if (hasAnnotationOfNoSave(field)) {
+                        //把UUID从Entity的主键中读取出来，设置到DataBean的uuid成员变量中
+                        if (StringUtils.equals("uuid", field.getName())) {
+                            ((DataBean) obj).setUuid(entity.getKey().getName());
+                        }
                     } else {
                         get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
                                 .invoke(obj, entity.getProperty(field.getName()));
@@ -159,8 +176,8 @@ public class GoogleDataStoreUtil {
      * 的某个Field是否含有指定的存储类型注解。如果有，则强转成对应的类型，再利用
      * Google提供的API将数据提取成String，在放入普通的JavaBean中。</p>
      * <p/>
-     * <p><code>GoogleStoreType</code>是自定义的Annotation，for detail,
-     * you might click this{@link GoogleStoreType}</p>
+     * <p><code>GoogleStoreAction</code>是自定义的Annotation，for detail,
+     * you might click this{@link org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction}</p>
      *
      * @param f            Any Field of a <code>Object</code>
      * @param pointedClass <code>Class<?> pointedClass</?></code>,
@@ -177,9 +194,26 @@ public class GoogleDataStoreUtil {
             return Boolean.FALSE;
         }
         for (Annotation annotation : annotations) {
-            if (annotation instanceof GoogleStoreType) {
-                GoogleStoreType gst = (GoogleStoreType) annotation;
-                if (StringUtils.equals(gst.clazz().getName(), pointedClass.getName())) {
+            if (annotation instanceof GoogleStoreAction) {
+                GoogleStoreAction gst = (GoogleStoreAction) annotation;
+                if (StringUtils.equals(gst.storeType().getName(), pointedClass.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasAnnotationOfNoSave(Field f) throws Exception {
+        if (null == f) return Boolean.FALSE;
+        Annotation[] annotations = f.getDeclaredAnnotations();
+        if (null == annotations || annotations.length < 1) {
+            return Boolean.FALSE;
+        }
+        for (Annotation annotation : annotations) {
+            if (annotation instanceof GoogleStoreAction) {
+                GoogleStoreAction gst = (GoogleStoreAction) annotation;
+                if (BooleanUtils.isTrue(gst.noSave())) {
                     return true;
                 }
             }

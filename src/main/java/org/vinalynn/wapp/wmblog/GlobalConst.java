@@ -21,7 +21,6 @@ public class GlobalConst {
 
     public static final String KEY_BLOG_INFO = "bi";
 
-
     public static interface B_EXCEPTION {
         public static final String INVALID_PARAMS = "invalid params exception.";
     }

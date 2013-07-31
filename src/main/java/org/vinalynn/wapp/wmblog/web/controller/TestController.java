@@ -29,8 +29,8 @@ public class TestController {
     @RequestMapping(value = "/test-main.request")
     public String testMain(HttpServletRequest request, Model model) throws Exception {
 
-        testSaveSingleObject();
-        //getArticle();
+        //testSaveSingleObject();
+        getArticle();
 
         //model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY, getArticle());
         return GlobalConst.FTL_COMMON_INDEX;

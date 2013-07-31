@@ -1,5 +1,8 @@
 package org.vinalynn.wapp.wmblog.data;
 
+import org.vinalynn.wapp.wmblog.GlobalConst;
+import org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction;
+
 /**
  * User: caiwm
  * Date: 13-7-29
@@ -7,7 +10,8 @@ package org.vinalynn.wapp.wmblog.data;
  */
 public abstract class DataBean {
     private String kind;
-    //private String uuid;
+    @GoogleStoreAction(noSave = true)
+    private String uuid;
 
     public void setKind(String kind) {
         this.kind = kind;
@@ -17,11 +21,11 @@ public abstract class DataBean {
         return kind;
     }
 
-//    public String getUuid() {
-//        return uuid;
-//    }
-//
-//    public void setUuid(String uuid) {
-//        this.uuid = uuid;
-//    }
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }
