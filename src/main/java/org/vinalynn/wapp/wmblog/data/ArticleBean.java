@@ -1,18 +1,39 @@
 package org.vinalynn.wapp.wmblog.data;
 
 import com.google.appengine.api.datastore.Text;
-import org.vinalynn.wapp.wmblog.annotations.GoogleStoreType;
+import org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction;
+
+import java.util.Date;
 
 /**
  * User: caiwm
  * Date: 13-7-29
- * Time: ÏÂÎç4:56
+ * Time: AM 4:56
  */
 public class ArticleBean extends DataBean {
     public String title;
     public String owner;
-    @GoogleStoreType(clazz = Text.class)
+    @GoogleStoreAction(storeType = Text.class)
     public String content;
+    public String url;
+    public java.util.Date createDate;
+    public String state;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getTitle() {
         return title;
@@ -38,4 +59,11 @@ public class ArticleBean extends DataBean {
         this.content = content;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 }

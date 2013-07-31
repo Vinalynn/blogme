@@ -1,10 +1,10 @@
 package org.vinalynn.wapp.wmblog.util;
 
 import com.google.appengine.api.datastore.*;
-import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.vinalynn.wapp.wmblog.GlobalConst;
-import org.vinalynn.wapp.wmblog.annotations.GoogleStoreType;
+import org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction;
 import org.vinalynn.wapp.wmblog.data.DataBean;
 
 import java.lang.annotation.Annotation;
@@ -15,9 +15,18 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * <p>åˆ©ç”¨Google DataStoreå®ç°çš„æ•°æ®æŒä¹…åŒ–å·¥å…·ï¼Œä¸»è¦åŠŸèƒ½æœ‰ï¼š
+ * <ul>
+ * <li>1ã€JavaBeanè‡ªåŠ©è½¬æ¢Entityï¼Œå¯¹äºç‰¹æ®Šå­—æ®µå®ç°æ³¨è§£è§£é‡ŠåŠŸèƒ½ã€‚</li>
+ * <li>2ã€æ”¯æŒåˆ†é¡µæŸ¥è¯¢æ•°æ®ï¼Œæ”¯æŒè‡ªå®šä¹‰æ’åºã€‚</li>
+ * </ul>
+ *
+ *
+ * </p>
+ *
  * User: caiwm
  * Date: 13-7-29
- * Time: ÏÂÎç5:01
+ * Time: ä¸‹åˆ5:01
  */
 public class GoogleDataStoreUtil {
 
@@ -26,8 +35,8 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>½«JavabeanµÄ¸÷Ïîfield´æÈëEntity£¬È»ºó±£´æµ½GoogleµÄDataStoreÖĞ¡£
-     * ²»·µ»ØUUID</p>
+     * <p>å°†Javabeançš„å„é¡¹fieldå­˜å…¥Entityï¼Œç„¶åä¿å­˜åˆ°Googleçš„DataStoreä¸­ã€‚
+     * ä¸è¿”å›UUID</p>
      *
      * @param obj
      * @throws Exception
@@ -37,39 +46,51 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>½«JavabeanµÄ¸÷Ïîfield´æÈëEntity£¬È»ºó±£´æµ½GoogleµÄDataStoreÖĞ¡£
-     * ·µ»ØÉú³ÉµÄuuid</p>
+     * <p>å°†Javabeançš„å„é¡¹fieldå­˜å…¥Entityï¼Œç„¶åä¿å­˜åˆ°Googleçš„DataStoreä¸­ã€‚
+     * è¿”å›ç”Ÿæˆçš„uuid</p>
      *
-     * @param obj Òª±£´æµÄJavaBean
-     * @return DataÊı¾İµÄÎ¨Ò»±êÊ¶ uuid
+     * @param obj è¦ä¿å­˜çš„JavaBean
+     * @return Dataæ•°æ®çš„å”¯ä¸€æ ‡è¯† uuid
      * @throws Exception
      */
     public static String storeSingleDataWithUUIDRtn(DataBean obj) throws Exception {
         if (null == obj) {
             throw new Exception(GlobalConst.B_EXCEPTION.INVALID_PARAMS);
         }
-        obj.setUuid(UUID.randomUUID().toString());
-        KeyRange kr = getDataStore().allocateIds(obj.getKind(), 1);
-        Entity entity = new Entity(kr.getStart());
+        //obj.setUuid(UUID.randomUUID().toString());
+        //KeyRange kr = getDataStore().allocateIds(obj.getKind(), 1);
+        //KeyFactory.createKey(obj.getKind(), UUID.randomUUID().toString());
+        Entity entity;
+        if (StringUtils.isNotEmpty(obj.getUuid())) {
+            entity = new Entity(KeyFactory.createKey(obj.getKind(), obj.getUuid()));
+        } else {
+            entity = new Entity(KeyFactory.createKey(obj.getKind(), UUID.randomUUID().toString()));
+        }
 
         Field[] fields = obj.getClass().getDeclaredFields();
         if (null != fields && fields.length > 0) {
             for (Field field : fields) {
-                boolean storedAsPointedType = Boolean.FALSE;
+                //boolean storedAsPointedType = Boolean.FALSE;
                 if (hasAnnotationOfPointedType(field, Text.class)) {
                     Text text = new Text(
                             String.valueOf(get_GetValueMethod(obj.getClass(),
                                     field.getName()).invoke(obj))
                     );
                     entity.setProperty(field.getName(), text);
-                    storedAsPointedType = Boolean.TRUE;
+                    //storedAsPointedType = Boolean.TRUE;
+                } //else if(hasAnnotationOfNoSave(field)){
+                //  continue;
+                else {
+                    entity.setProperty(field.getName(),
+                            get_GetValueMethod(obj.getClass(), field.getName()).invoke(obj));
                 }
+
 
 //                Annotation[] annotations = field.getDeclaredAnnotations();
 //                if (null != annotations && annotations.length > 0) {
 //                    for (Annotation annotation : annotations) {
-//                        if (annotation instanceof GoogleStoreType) {
-//                            GoogleStoreType a = (GoogleStoreType) annotation;
+//                        if (annotation instanceof GoogleStoreAction) {
+//                            GoogleStoreAction a = (GoogleStoreAction) annotation;
 //                            if (StringUtils.equals(a.clazz().getName(), Text.class.getName())) {
 //
 //                            }
@@ -77,26 +98,139 @@ public class GoogleDataStoreUtil {
 //                        }
 //                    }
 //                }
-                if (!storedAsPointedType) {
-                    entity.setProperty(field.getName(),
-                            get_GetValueMethod(obj.getClass(), field.getName()).invoke(obj));
-                }
+                //if (!storedAsPointedType) {
+
+                //}
             }
         }
         Field[] dataBeanFields = DataBean.class.getDeclaredFields();
         if (null != dataBeanFields && dataBeanFields.length > 0) {
             for (Field field : dataBeanFields) {
-                entity.setProperty(field.getName(),
-                        get_GetValueMethod(DataBean.class, field.getName()).invoke(obj));
+                if (!hasAnnotationOfNoSave(field)) {
+                    entity.setProperty(field.getName(),
+                            get_GetValueMethod(DataBean.class, field.getName()).invoke(obj));
+                }
             }
         }
-
         getDataStore().put(entity);
-        return obj.getUuid();
+        // key's name is generated-uuid,
+        // this is what will be returned.
+        return entity.getKey().getName();
     }
 
     /**
-     * »ñÈ¡Êı¾İ£¬¸ù¾İ²»Í¬µÄKindÀà±ğ£¬ÒÔ¼°ÒµÎñ¶ÔÏóÀàĞÍ
+     * @param query
+     * @param page
+     * @param pageSize
+     * @param sortPName
+     * @param sortType
+     * @return
+     * @throws Exception
+     */
+    public static List<Entity> executeQuery(Query query, int page, int pageSize,
+                                            String sortPName, Query.SortDirection sortType,
+                                            Query.Filter[] filters) throws Exception {
+        if (null != filters) {
+            query.setFilter(Query.CompositeFilterOperator.and(filters));
+        }
+        if (StringUtils.isNotEmpty(sortPName) && sortType != null) {
+            query.addSort(sortPName, sortType);
+        }
+        PreparedQuery pq = getDataStore().prepare(query);
+        return pq.asList(FetchOptions.Builder.withOffset(page * pageSize).limit(pageSize));
+    }
+
+    /**
+     * @param query
+     * @param page
+     * @param pageSize
+     * @param sortPName
+     * @param sortType
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T> List<T> executeQuery(Query query, int page, int pageSize,
+                                           String sortPName, Query.SortDirection sortType,
+                                           Query.Filter[] filters, Class<T> clazz) throws Exception {
+        List<Entity> eResults = executeQuery(query, page, pageSize, sortPName, sortType, filters);
+        List<T> tResults = null;
+        if (null != eResults && eResults.size() > 0) {
+            tResults = new ArrayList<T>();
+            for (Entity entity : eResults) {
+                tResults.add(makeUpBean(clazz, entity));
+            }
+        }
+        return tResults;
+    }
+
+    /**
+     * @param key
+     * @param dataClazz
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T> T getDataByKey(Key key, Class<T> dataClazz) throws Exception {
+        Entity entity = getDataStore().get(key);
+        return makeUpBean(dataClazz, entity);
+    }
+
+    /**
+     * @param clazz
+     * @param entity
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    private static <T> T makeUpBean(Class<T> clazz, Entity entity) throws Exception {
+
+        Field[] fields = clazz.getDeclaredFields();
+        if (null == fields || fields.length < 1) {
+            return null;
+        }
+        if (null == entity) return null;
+
+        T obj = clazz.newInstance();
+
+        ((DataBean) obj).setKind(entity.getKind());
+        for (Field field : fields) {
+            if (null == entity.getProperty(field.getName()))
+                continue;
+            if (hasAnnotationOfPointedType(field, Text.class)) {
+                Object e_obj = entity.getProperty(field.getName());
+                get_SetValueMethod(field.getName(), clazz, new Class<?>[]{field.getType()})
+                        .invoke(obj, ((Text) e_obj).getValue());
+            } else {
+                get_SetValueMethod(field.getName(), clazz, new Class<?>[]{field.getType()})
+                        .invoke(obj, entity.getProperty(field.getName()));
+            }
+        }
+
+        fields = DataBean.class.getDeclaredFields();
+        if (null != fields && fields.length > 0) {
+            for (Field field : fields) {
+                if (hasAnnotationOfPointedType(field, Text.class)) {
+                    Object e_obj = entity.getProperty(field.getName());
+                    get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
+                            .invoke(obj, ((Text) e_obj).getValue());
+                } else if (hasAnnotationOfNoSave(field)) {
+                    //æŠŠUUIDä»Entityçš„ä¸»é”®ä¸­è¯»å–å‡ºæ¥ï¼Œè®¾ç½®åˆ°DataBeançš„uuidæˆå‘˜å˜é‡ä¸­
+                    if (StringUtils.equals("uuid", field.getName())) {
+                        ((DataBean) obj).setUuid(entity.getKey().getName());
+                    }
+                } else {
+                    get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
+                            .invoke(obj, entity.getProperty(field.getName()));
+                }
+            }
+        }
+        return obj;
+    }
+
+    /**
+     * è·å–æ•°æ®ï¼Œæ ¹æ®ä¸åŒçš„Kindç±»åˆ«ï¼Œä»¥åŠä¸šåŠ¡å¯¹è±¡ç±»å‹
      *
      * @param kind
      * @param dataClazz
@@ -138,32 +272,36 @@ public class GoogleDataStoreUtil {
                         Object e_obj = entity.getProperty(field.getName());
                         get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
                                 .invoke(obj, ((Text) e_obj).getValue());
+                    } else if (hasAnnotationOfNoSave(field)) {
+                        //æŠŠUUIDä»Entityçš„ä¸»é”®ä¸­è¯»å–å‡ºæ¥ï¼Œè®¾ç½®åˆ°DataBeançš„uuidæˆå‘˜å˜é‡ä¸­
+                        if (StringUtils.equals("uuid", field.getName())) {
+                            ((DataBean) obj).setUuid(entity.getKey().getName());
+                        }
                     } else {
                         get_SetValueMethod(field.getName(), DataBean.class, new Class<?>[]{field.getType()})
                                 .invoke(obj, entity.getProperty(field.getName()));
                     }
                 }
             }
-
             destArrays.add(obj);
         }
         return destArrays;
     }
 
     /**
-     * <p>ÒòÎªÔÚ´ÓGoogle DataStore¶ÁÈ¡Êı¾İÊ±£¬Èç¹ûÔÚDataStoreÖĞ²»ÊÇ»ù´¡ÀàĞÍ£¬
-     * Í¨³£ÕâÖÖÇé¿ö»á·¢ÉúÔÚjava.lang.StringÀàĞÍµÄÊı¾İÖĞ¡£Õâ¸öÊ±ºòĞèÒª½«TextÀàĞÍ
-     * µÄ´æ´¢Êı¾İ×ª»¯³ÉStringÀàĞÍ£¬´æÈëJavaBeanÖĞ¡£Õâ¸ö·½·¨¾ÍÊÇÎªÁËÅĞ¶ÏJavaBean
-     * µÄÄ³¸öFieldÊÇ·ñº¬ÓĞÖ¸¶¨µÄ´æ´¢ÀàĞÍ×¢½â¡£Èç¹ûÓĞ£¬ÔòÇ¿×ª³É¶ÔÓ¦µÄÀàĞÍ£¬ÔÙÀûÓÃ
-     * GoogleÌá¹©µÄAPI½«Êı¾İÌáÈ¡³ÉString£¬ÔÚ·ÅÈëÆÕÍ¨µÄJavaBeanÖĞ¡£</p>
+     * <p>å› ä¸ºåœ¨ä»Google DataStoreè¯»å–æ•°æ®æ—¶ï¼Œå¦‚æœåœ¨DataStoreä¸­ä¸æ˜¯åŸºç¡€ç±»å‹ï¼Œ
+     * é€šå¸¸è¿™ç§æƒ…å†µä¼šå‘ç”Ÿåœ¨java.lang.Stringç±»å‹çš„æ•°æ®ä¸­ã€‚è¿™ä¸ªæ—¶å€™éœ€è¦å°†Textç±»å‹
+     * çš„å­˜å‚¨æ•°æ®è½¬åŒ–æˆStringç±»å‹ï¼Œå­˜å…¥JavaBeanä¸­ã€‚è¿™ä¸ªæ–¹æ³•å°±æ˜¯ä¸ºäº†åˆ¤æ–­JavaBean
+     * çš„æŸä¸ªFieldæ˜¯å¦å«æœ‰æŒ‡å®šçš„å­˜å‚¨ç±»å‹æ³¨è§£ã€‚å¦‚æœæœ‰ï¼Œåˆ™å¼ºè½¬æˆå¯¹åº”çš„ç±»å‹ï¼Œå†åˆ©ç”¨
+     * Googleæä¾›çš„APIå°†æ•°æ®æå–æˆStringï¼Œåœ¨æ”¾å…¥æ™®é€šçš„JavaBeanä¸­ã€‚</p>
      * <p/>
-     * <p><code>GoogleStoreType</code>ÊÇ×Ô¶¨ÒåµÄAnnotation£¬for detail,
-     * you might click this{@link GoogleStoreType}</p>
+     * <p><code>GoogleStoreAction</code>æ˜¯è‡ªå®šä¹‰çš„Annotationï¼Œfor detail,
+     * you might click this{@link org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction}</p>
      *
      * @param f            Any Field of a <code>Object</code>
      * @param pointedClass <code>Class<?> pointedClass</?></code>,
-     *                     Google DataStoreµÄ´æ´¢ÀàĞÍ£¬Ò»°ãÊ¹ÓÃ<code>Text
-     *                     </code>µÄ±È½Ï¶à¡£
+     *                     Google DataStoreçš„å­˜å‚¨ç±»å‹ï¼Œä¸€èˆ¬ä½¿ç”¨<code>Text
+     *                     </code>çš„æ¯”è¾ƒå¤šã€‚
      * @return if f has the annotation of pointed store type 'pointedClass'
      *         return true, then return false.
      * @throws Exception
@@ -175,9 +313,26 @@ public class GoogleDataStoreUtil {
             return Boolean.FALSE;
         }
         for (Annotation annotation : annotations) {
-            if (annotation instanceof GoogleStoreType) {
-                GoogleStoreType gst = (GoogleStoreType) annotation;
-                if (StringUtils.equals(gst.clazz().getName(), pointedClass.getName())) {
+            if (annotation instanceof GoogleStoreAction) {
+                GoogleStoreAction gst = (GoogleStoreAction) annotation;
+                if (StringUtils.equals(gst.storeType().getName(), pointedClass.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasAnnotationOfNoSave(Field f) throws Exception {
+        if (null == f) return Boolean.FALSE;
+        Annotation[] annotations = f.getDeclaredAnnotations();
+        if (null == annotations || annotations.length < 1) {
+            return Boolean.FALSE;
+        }
+        for (Annotation annotation : annotations) {
+            if (annotation instanceof GoogleStoreAction) {
+                GoogleStoreAction gst = (GoogleStoreAction) annotation;
+                if (BooleanUtils.isTrue(gst.noSave())) {
                     return true;
                 }
             }
@@ -186,12 +341,12 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>get the getter of a field.Ò»°ãÆÕÍ¨µÄJavaBean¶¼»áÉú³É³ÉÔ±±äÁ¿
-     * µÄgetterºÍsetter.ÒòÎªgetterÒ»°ãÊÇÃ»ÓĞ²ÎÊıµÄ£¬ËùÒÔÖ±½ÓÊ¹ÓÃÁËClass²»´ø²ÎÊıµÄ
-     * ·½·¨»ñÈ¡º¯Êı¡£</p>
+     * <p>get the getter of a field.ä¸€èˆ¬æ™®é€šçš„JavaBeanéƒ½ä¼šç”Ÿæˆæˆå‘˜å˜é‡
+     * çš„getterå’Œsetter.å› ä¸ºgetterä¸€èˆ¬æ˜¯æ²¡æœ‰å‚æ•°çš„ï¼Œæ‰€ä»¥ç›´æ¥ä½¿ç”¨äº†Classä¸å¸¦å‚æ•°çš„
+     * æ–¹æ³•è·å–å‡½æ•°ã€‚</p>
      *
-     * @param clazz     field¹éÊôµÄclass
-     * @param fieldName Field×Ö¶ÎÃû³Æ
+     * @param clazz     fieldå½’å±çš„class
+     * @param fieldName Fieldå­—æ®µåç§°
      * @return Method of getFieldName
      * @throws Exception
      */
@@ -204,12 +359,12 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>¸ù¾İ³ÉÔ±±äÁ¿µÄÀàĞÍ£¬»ñÈ¡ClassÖĞÕâ¸ö³ÉÔ±±äÁ¿µÄsetter.Ö±½Ó»ñÈ¡³ÉÔ±±äÁ¿
-     * µÄÀàĞÍ×÷Îª²ÎÊı¾Í¿ÉÒÔÁË¡£</p>
+     * <p>æ ¹æ®æˆå‘˜å˜é‡çš„ç±»å‹ï¼Œè·å–Classä¸­è¿™ä¸ªæˆå‘˜å˜é‡çš„setter.ç›´æ¥è·å–æˆå‘˜å˜é‡
+     * çš„ç±»å‹ä½œä¸ºå‚æ•°å°±å¯ä»¥äº†ã€‚</p>
      *
-     * @param fieldName  ³ÉÔ±±äÁ¿µÄÖµ
-     * @param clazz      ³ÉÔ±±äÁ¿¹éÊôµÄBean
-     * @param paramsType ³ÉÔ±±äÁ¿µÄÀàĞÍ£¬Õâ¸öÆäÊµºÜÖØÒªµÄ¡£
+     * @param fieldName  æˆå‘˜å˜é‡çš„å€¼
+     * @param clazz      æˆå‘˜å˜é‡å½’å±çš„Bean
+     * @param paramsType æˆå‘˜å˜é‡çš„ç±»å‹ï¼Œè¿™ä¸ªå…¶å®å¾ˆé‡è¦çš„ã€‚
      * @return
      * @throws Exception
      */
