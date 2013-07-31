@@ -15,14 +15,14 @@ import java.util.List;
  * <p/>
  * User: caiwm
  * Date: 13-7-29
- * Time: ÏÂÎç5:23
+ * Time: ï¿½ï¿½ï¿½ï¿½5:23
  */
 public class ArticleServiceImpl implements IArticleService {
 
     private transient static Logger log = Logger.getLogger(ArticleServiceImpl.class);
 
     /**
-     * µ÷ÓÃ¹È¸èµÄ³Ö¾Ã»¯½Ó¿ÚDatastoreService£¬¶ÔÊı¾İ½øĞĞ³Ö¾Ã»¯
+     * è°ƒç”¨è°·æ­Œçš„æŒä¹…åŒ–æ¥å£DatastoreServiceï¼Œå¯¹æ•°æ®è¿›è¡ŒæŒä¹…åŒ–
      *
      * @param article
      * @throws Exception

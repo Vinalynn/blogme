@@ -3,7 +3,7 @@ package org.vinalynn.wapp.wmblog;
 /**
  * User: caiwm
  * Date: 13-7-26
- * Time: обнГ1:48
+ * Time: AM 1:48
  */
 public class GlobalConst {
 
@@ -17,6 +17,9 @@ public class GlobalConst {
 
 
     public static final String FILTER_UUID = "uuid";
+
+
+    public static final String KEY_BLOG_INFO = "bi";
 
 
     public static interface B_EXCEPTION {

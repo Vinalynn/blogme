@@ -34,7 +34,15 @@
                 <prop key="whitespace_stripping">yes</prop>
             </props>
         </property>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="html_compressor" value-ref="htmlCompressorDirective">
+                </entry>
+            </map>
+        </property>
     </bean>
+    <bean id="htmlCompressorDirective" class="org.vinalynn.wapp.wmblog.web.plugins.HtmlCompressorDirective"/>
+
 
     <bean id="guestbookController" class="org.vinalynn.wapp.wmblog.web.controller.GuestbookController"/>
     <bean id="baseController" class="org.vinalynn.wapp.wmblog.web.controller.BaseController"/>

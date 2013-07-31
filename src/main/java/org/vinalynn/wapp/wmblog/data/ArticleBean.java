@@ -6,7 +6,7 @@ import org.vinalynn.wapp.wmblog.annotations.GoogleStoreType;
 /**
  * User: caiwm
  * Date: 13-7-29
- * Time: обнГ4:56
+ * Time: AM 4:56
  */
 public class ArticleBean extends DataBean {
     public String title;

@@ -5,4 +5,15 @@
 
     <import resource="classpath:controller.xml"/>
     <import resource="classpath:service.xml"/>
+
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
+    <!-- 拦截器-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <bean class="org.vinalynn.wapp.wmblog.web.interceptor.BaseRequestHandlerInterceptor"/>
+            </list>
+        </property>
+    </bean>
 </beans>

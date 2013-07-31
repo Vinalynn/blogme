@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * User: caiwm
  * Date: 13-7-29
- * Time: ионГ9:00
+ * Time: AM 9:00
  */
 @Controller
 public class BaseController {

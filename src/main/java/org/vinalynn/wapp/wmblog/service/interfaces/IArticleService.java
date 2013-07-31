@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * User: caiwm
  * Date: 13-7-29
- * Time: обнГ5:21
+ * Time: AM 5:21
  */
 public interface IArticleService {
 

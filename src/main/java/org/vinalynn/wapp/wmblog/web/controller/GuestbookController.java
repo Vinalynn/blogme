@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * User: caiwm
  * Date: 13-7-26
- * Time: обнГ1:45
+ * Time: AM 1:45
  */
 @Controller
 public class GuestbookController {

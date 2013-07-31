@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * User: caiwm
  * Date: 13-7-29
- * Time: ÏÂÎç5:01
+ * Time: ä¸‹åˆ5:01
  */
 public class GoogleDataStoreUtil {
 
@@ -26,8 +26,8 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>½«JavabeanµÄ¸÷Ïîfield´æÈëEntity£¬È»ºó±£´æµ½GoogleµÄDataStoreÖĞ¡£
-     * ²»·µ»ØUUID</p>
+     * <p>å°†Javabeançš„å„é¡¹fieldå­˜å…¥Entityï¼Œç„¶åä¿å­˜åˆ°Googleçš„DataStoreä¸­ã€‚
+     * ä¸è¿”å›UUID</p>
      *
      * @param obj
      * @throws Exception
@@ -37,11 +37,11 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>½«JavabeanµÄ¸÷Ïîfield´æÈëEntity£¬È»ºó±£´æµ½GoogleµÄDataStoreÖĞ¡£
-     * ·µ»ØÉú³ÉµÄuuid</p>
+     * <p>å°†Javabeançš„å„é¡¹fieldå­˜å…¥Entityï¼Œç„¶åä¿å­˜åˆ°Googleçš„DataStoreä¸­ã€‚
+     * è¿”å›ç”Ÿæˆçš„uuid</p>
      *
-     * @param obj Òª±£´æµÄJavaBean
-     * @return DataÊı¾İµÄÎ¨Ò»±êÊ¶ uuid
+     * @param obj è¦ä¿å­˜çš„JavaBean
+     * @return Dataæ•°æ®çš„å”¯ä¸€æ ‡è¯† uuid
      * @throws Exception
      */
     public static String storeSingleDataWithUUIDRtn(DataBean obj) throws Exception {
@@ -96,7 +96,7 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * »ñÈ¡Êı¾İ£¬¸ù¾İ²»Í¬µÄKindÀà±ğ£¬ÒÔ¼°ÒµÎñ¶ÔÏóÀàĞÍ
+     * è·å–æ•°æ®ï¼Œæ ¹æ®ä¸åŒçš„Kindç±»åˆ«ï¼Œä»¥åŠä¸šåŠ¡å¯¹è±¡ç±»å‹
      *
      * @param kind
      * @param dataClazz
@@ -151,19 +151,19 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>ÒòÎªÔÚ´ÓGoogle DataStore¶ÁÈ¡Êı¾İÊ±£¬Èç¹ûÔÚDataStoreÖĞ²»ÊÇ»ù´¡ÀàĞÍ£¬
-     * Í¨³£ÕâÖÖÇé¿ö»á·¢ÉúÔÚjava.lang.StringÀàĞÍµÄÊı¾İÖĞ¡£Õâ¸öÊ±ºòĞèÒª½«TextÀàĞÍ
-     * µÄ´æ´¢Êı¾İ×ª»¯³ÉStringÀàĞÍ£¬´æÈëJavaBeanÖĞ¡£Õâ¸ö·½·¨¾ÍÊÇÎªÁËÅĞ¶ÏJavaBean
-     * µÄÄ³¸öFieldÊÇ·ñº¬ÓĞÖ¸¶¨µÄ´æ´¢ÀàĞÍ×¢½â¡£Èç¹ûÓĞ£¬ÔòÇ¿×ª³É¶ÔÓ¦µÄÀàĞÍ£¬ÔÙÀûÓÃ
-     * GoogleÌá¹©µÄAPI½«Êı¾İÌáÈ¡³ÉString£¬ÔÚ·ÅÈëÆÕÍ¨µÄJavaBeanÖĞ¡£</p>
+     * <p>å› ä¸ºåœ¨ä»Google DataStoreè¯»å–æ•°æ®æ—¶ï¼Œå¦‚æœåœ¨DataStoreä¸­ä¸æ˜¯åŸºç¡€ç±»å‹ï¼Œ
+     * é€šå¸¸è¿™ç§æƒ…å†µä¼šå‘ç”Ÿåœ¨java.lang.Stringç±»å‹çš„æ•°æ®ä¸­ã€‚è¿™ä¸ªæ—¶å€™éœ€è¦å°†Textç±»å‹
+     * çš„å­˜å‚¨æ•°æ®è½¬åŒ–æˆStringç±»å‹ï¼Œå­˜å…¥JavaBeanä¸­ã€‚è¿™ä¸ªæ–¹æ³•å°±æ˜¯ä¸ºäº†åˆ¤æ–­JavaBean
+     * çš„æŸä¸ªFieldæ˜¯å¦å«æœ‰æŒ‡å®šçš„å­˜å‚¨ç±»å‹æ³¨è§£ã€‚å¦‚æœæœ‰ï¼Œåˆ™å¼ºè½¬æˆå¯¹åº”çš„ç±»å‹ï¼Œå†åˆ©ç”¨
+     * Googleæä¾›çš„APIå°†æ•°æ®æå–æˆStringï¼Œåœ¨æ”¾å…¥æ™®é€šçš„JavaBeanä¸­ã€‚</p>
      * <p/>
-     * <p><code>GoogleStoreType</code>ÊÇ×Ô¶¨ÒåµÄAnnotation£¬for detail,
+     * <p><code>GoogleStoreType</code>æ˜¯è‡ªå®šä¹‰çš„Annotationï¼Œfor detail,
      * you might click this{@link GoogleStoreType}</p>
      *
      * @param f            Any Field of a <code>Object</code>
      * @param pointedClass <code>Class<?> pointedClass</?></code>,
-     *                     Google DataStoreµÄ´æ´¢ÀàĞÍ£¬Ò»°ãÊ¹ÓÃ<code>Text
-     *                     </code>µÄ±È½Ï¶à¡£
+     *                     Google DataStoreçš„å­˜å‚¨ç±»å‹ï¼Œä¸€èˆ¬ä½¿ç”¨<code>Text
+     *                     </code>çš„æ¯”è¾ƒå¤šã€‚
      * @return if f has the annotation of pointed store type 'pointedClass'
      *         return true, then return false.
      * @throws Exception
@@ -186,12 +186,12 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>get the getter of a field.Ò»°ãÆÕÍ¨µÄJavaBean¶¼»áÉú³É³ÉÔ±±äÁ¿
-     * µÄgetterºÍsetter.ÒòÎªgetterÒ»°ãÊÇÃ»ÓĞ²ÎÊıµÄ£¬ËùÒÔÖ±½ÓÊ¹ÓÃÁËClass²»´ø²ÎÊıµÄ
-     * ·½·¨»ñÈ¡º¯Êı¡£</p>
+     * <p>get the getter of a field.ä¸€èˆ¬æ™®é€šçš„JavaBeanéƒ½ä¼šç”Ÿæˆæˆå‘˜å˜é‡
+     * çš„getterå’Œsetter.å› ä¸ºgetterä¸€èˆ¬æ˜¯æ²¡æœ‰å‚æ•°çš„ï¼Œæ‰€ä»¥ç›´æ¥ä½¿ç”¨äº†Classä¸å¸¦å‚æ•°çš„
+     * æ–¹æ³•è·å–å‡½æ•°ã€‚</p>
      *
-     * @param clazz     field¹éÊôµÄclass
-     * @param fieldName Field×Ö¶ÎÃû³Æ
+     * @param clazz     fieldå½’å±çš„class
+     * @param fieldName Fieldå­—æ®µåç§°
      * @return Method of getFieldName
      * @throws Exception
      */
@@ -204,12 +204,12 @@ public class GoogleDataStoreUtil {
     }
 
     /**
-     * <p>¸ù¾İ³ÉÔ±±äÁ¿µÄÀàĞÍ£¬»ñÈ¡ClassÖĞÕâ¸ö³ÉÔ±±äÁ¿µÄsetter.Ö±½Ó»ñÈ¡³ÉÔ±±äÁ¿
-     * µÄÀàĞÍ×÷Îª²ÎÊı¾Í¿ÉÒÔÁË¡£</p>
+     * <p>æ ¹æ®æˆå‘˜å˜é‡çš„ç±»å‹ï¼Œè·å–Classä¸­è¿™ä¸ªæˆå‘˜å˜é‡çš„setter.ç›´æ¥è·å–æˆå‘˜å˜é‡
+     * çš„ç±»å‹ä½œä¸ºå‚æ•°å°±å¯ä»¥äº†ã€‚</p>
      *
-     * @param fieldName  ³ÉÔ±±äÁ¿µÄÖµ
-     * @param clazz      ³ÉÔ±±äÁ¿¹éÊôµÄBean
-     * @param paramsType ³ÉÔ±±äÁ¿µÄÀàĞÍ£¬Õâ¸öÆäÊµºÜÖØÒªµÄ¡£
+     * @param fieldName  æˆå‘˜å˜é‡çš„å€¼
+     * @param clazz      æˆå‘˜å˜é‡å½’å±çš„Bean
+     * @param paramsType æˆå‘˜å˜é‡çš„ç±»å‹ï¼Œè¿™ä¸ªå…¶å®å¾ˆé‡è¦çš„ã€‚
      * @return
      * @throws Exception
      */

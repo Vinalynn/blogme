@@ -8,13 +8,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>ÒòÎªGoogle DataStoreµÄEntity¶ÔÓÚÊôĞÔµÄ´óĞ¡ÒªÇó±È½ÏÑÏ¸ñ£¬
- * ËùÒÔ¶ÔÓÚ±È½Ï´óµÄString²ÉÓÃDataStoreµÄTextÀ´´æÈ¡£¬ËùÒÔÔÚ´æÈ¡
- * µÄÊ±ºòÒª¶à·â×°Ò»²ã¡£Õâ´Î²ÉÓÃ×¢½âµÄ·½Ê½À´ÉúÃüĞèÒª×ª»»³ÉTextµÄ×Ö
- * ¶Î¡£</p>
+ * <p>å› ä¸ºGoogle DataStoreçš„Entityå¯¹äºå±æ€§çš„å¤§å°è¦æ±‚æ¯”è¾ƒä¸¥æ ¼ï¼Œ
+ * æ‰€ä»¥å¯¹äºæ¯”è¾ƒå¤§çš„Stringé‡‡ç”¨DataStoreçš„Textæ¥å­˜å–ï¼Œæ‰€ä»¥åœ¨å­˜å–
+ * çš„æ—¶å€™è¦å¤šå°è£…ä¸€å±‚ã€‚è¿™æ¬¡é‡‡ç”¨æ³¨è§£çš„æ–¹å¼æ¥ç”Ÿå‘½éœ€è¦è½¬æ¢æˆTextçš„å­—
+ * æ®µã€‚</p>
  * User: caiwm
  * Date: 13-7-30
- * Time: ÉÏÎç10:29
+ * Time: AM 10:29
  */
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.LOCAL_VARIABLE})
 @Retention(RetentionPolicy.RUNTIME)
