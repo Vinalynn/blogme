@@ -10,6 +10,22 @@
     <div class="container">
         <#include "common/header.ftl">
 
+        <div class="main-wrapper">
+            <div id="main-left">
+                <div style="width: 100%;">
+                    <p>
+                        <img src="/img/if-not-false-then-true-pic.jpg" width="560"
+                             height="145" style="border-radius: 2px">
+                    </p>
+                </div>
+
+            </div>
+            <div id="main-right">123</div>
+
+        </div>
+
+
+
         <div id="coming-soon" class="clearfloat" style="text-align: center;padding-top: 100px">
             <a style="font-size: 5em;text-shadow: 1px 1px 2px #333;color:#000088;">Coming soon...</a>
         </div>

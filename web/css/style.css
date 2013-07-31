@@ -8,11 +8,32 @@
 body{
     /* font:11pt Cantarell,'Droid Sans',Verdana,sans-serif; */
     /* font:11pt Arial,sans-serif; */
-    font-size:10pt;
+    font-size:12px;
     /*font-family: "Palatino Linotype", *//* Windows *//* "URW Palladio L", *//* Unix+FontConfig (ugly!) *//* "palladio l", *//* Unix+X+FreeType *//* palatino, *//* MacOS *//* "book antiqua", *//* Win95 *//* *//* Fallback options *//* times, *//* Unix+X, MacOS *//* serif;*/
-    font-family: "Source Sans Pro", sans-serif;
+    /*font-family: "Source Sans Pro", sans-serif;*/
+    /*font-family: "arial",sans-serif;*/
+    font-family: 'Quintessential', sans-serif, sans-serif;
     background:#333;
 }
+
+td, th{
+    display: table-cell;
+    vertical-align: inherit;
+}
+
+table{
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: gray;
+}
+
+a, span, div{
+    font-family: 'Microsoft Yahei', 'Microsoft Jhenghei', 'STHeiti', 'PMingLiU', 'Simsun', sans-serif;
+}
+
+
+.heiti { font-family: "simhei",sans-serif }
+.yahei { font-family: "Microsoft YaHei",sans-serif }
 
 a:link, a:visited{
     text-decoration: none;
@@ -40,10 +61,28 @@ body {
 }
 
 .clearfloat{
-    float: none;
+    clear: both;
     display: block;
 }
 
+.clearright{
+    clear: right;
+}
+
 .left{
+    float: left;
+}
+
+#main-left{
+    float: left;
+    /*background: green;*/
+    width: 590px;
+    padding: 10px;
+}
+
+#main-right{
+    width: 310px;
+    padding: 10px 5px 5px 5px;
+    /*background: red;*/
     float: left;
 }
