@@ -20,19 +20,19 @@ import java.util.UUID;
  * <li>1、JavaBean自助转换Entity，对于特殊字段实现注解解释功能。</li>
  * <li>2、支持分页查询数据，支持自定义排序。</li>
  * </ul>
- *
- *
  * </p>
- *
  * User: caiwm
  * Date: 13-7-29
  * Time: 下午5:01
  */
 public class GoogleDataStoreUtil {
 
-    private static DatastoreService getDataStore() {
-        return DatastoreServiceFactory.getDatastoreService();
-    }
+    private static DatastoreService dataStore =
+            DatastoreServiceFactory.getDatastoreService();
+
+//    private static DatastoreService getDataStore() {
+//        return DatastoreServiceFactory.getDatastoreService();
+//    }
 
     /**
      * <p>将Javabean的各项field存入Entity，然后保存到Google的DataStore中。
@@ -43,6 +43,11 @@ public class GoogleDataStoreUtil {
      */
     public static void storeSingleBean(DataBean obj) throws Exception {
         storeSingleDataWithUUIDRtn(obj);
+    }
+
+    public static Transaction beginTransaction(){
+        TransactionOptions options = TransactionOptions.Builder.withXG(true);
+        return dataStore.beginTransaction(options);
     }
 
     /**
@@ -112,7 +117,7 @@ public class GoogleDataStoreUtil {
                 }
             }
         }
-        getDataStore().put(entity);
+        dataStore.put(entity);
         // key's name is generated-uuid,
         // this is what will be returned.
         return entity.getKey().getName();
@@ -136,7 +141,7 @@ public class GoogleDataStoreUtil {
         if (StringUtils.isNotEmpty(sortPName) && sortType != null) {
             query.addSort(sortPName, sortType);
         }
-        PreparedQuery pq = getDataStore().prepare(query);
+        PreparedQuery pq = dataStore.prepare(query);
         return pq.asList(FetchOptions.Builder.withOffset(page * pageSize).limit(pageSize));
     }
 
@@ -173,7 +178,7 @@ public class GoogleDataStoreUtil {
      * @throws Exception
      */
     public static <T> T getDataByKey(Key key, Class<T> dataClazz) throws Exception {
-        Entity entity = getDataStore().get(key);
+        Entity entity = dataStore.get(key);
         return makeUpBean(dataClazz, entity);
     }
 
@@ -246,7 +251,7 @@ public class GoogleDataStoreUtil {
                     Query.CompositeFilterOperator.and(filters)
             );
         }
-        PreparedQuery pq = getDataStore().prepare(query);
+        PreparedQuery pq = dataStore.prepare(query);
         List<T> destArrays = new ArrayList<T>();
         for (Entity entity : pq.asIterable()) {
             T obj = dataClazz.newInstance();
@@ -296,10 +301,11 @@ public class GoogleDataStoreUtil {
      * Google提供的API将数据提取成String，在放入普通的JavaBean中。</p>
      * <p/>
      * <p><code>GoogleStoreAction</code>是自定义的Annotation，for detail,
-     * you might click this{@link org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction}</p>
+     * you might click this
+     * {@link org.vinalynn.wapp.wmblog.annotations.GoogleStoreAction}</p>
      *
      * @param f            Any Field of a <code>Object</code>
-     * @param pointedClass <code>Class<?> pointedClass</?></code>,
+     * @param pointedClass <code>Class&lt;? pointedClass&gt;</code>,
      *                     Google DataStore的存储类型，一般使用<code>Text
      *                     </code>的比较多。
      * @return if f has the annotation of pointed store type 'pointedClass'

@@ -46,6 +46,9 @@
 
     <bean id="guestbookController" class="org.vinalynn.wapp.wmblog.web.controller.GuestbookController"/>
     <bean id="baseController" class="org.vinalynn.wapp.wmblog.web.controller.BaseController"/>
+    <bean id="articleController" class="org.vinalynn.wapp.wmblog.web.controller.ArticleController">
+        <property name="iArticleService" ref="iArticleService"/>
+    </bean>
     <bean id="testMainController" class="org.vinalynn.wapp.wmblog.web.controller.TestController">
         <property name="iArticleService" ref="iArticleService"/>
     </bean>

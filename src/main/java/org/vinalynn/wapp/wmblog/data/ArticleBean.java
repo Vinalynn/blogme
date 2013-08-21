@@ -15,6 +15,8 @@ public class ArticleBean extends DataBean {
     public String owner;
     @GoogleStoreAction(storeType = Text.class)
     public String content;
+    @GoogleStoreAction(storeType = Text.class)
+    public String text;
     public String url;
     public java.util.Date createDate;
     public String state;
@@ -65,5 +67,13 @@ public class ArticleBean extends DataBean {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

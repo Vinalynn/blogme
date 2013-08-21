@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>See Me, See You.</title>
+    <title></title>
     <#include "common/env.ftl">
 </head>
 </html>
@@ -18,16 +18,25 @@
                              height="145" style="border-radius: 2px">
                     </p>
                 </div>
+                <div class="article-item headline" style="width: 100%;">
+                    <h1>
+                        <span>头条</span>
+                    </h1>
+                    <div>
+                        这里边是头条
+                    </div>
+                </div>
 
+                <div class="article-item list" style="width: 100%;">
+                    <h1>
+                        <span>文章列表</span>
+                    </h1>
+                    <div>
+                        这里边是文章列表
+                    </div>
+                </div>
             </div>
             <div id="main-right">123</div>
-
-        </div>
-
-
-
-        <div id="coming-soon" class="clearfloat" style="text-align: center;padding-top: 100px">
-            <a style="font-size: 5em;text-shadow: 1px 1px 2px #333;color:#000088;">Coming soon...</a>
         </div>
     </div>
 </body>

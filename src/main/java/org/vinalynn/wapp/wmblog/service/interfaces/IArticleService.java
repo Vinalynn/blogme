@@ -2,6 +2,7 @@ package org.vinalynn.wapp.wmblog.service.interfaces;
 
 import com.google.appengine.api.datastore.Query;
 import org.vinalynn.wapp.wmblog.data.ArticleBean;
+import org.vinalynn.wapp.wmblog.data.TagBean;
 
 import java.util.List;
 
@@ -11,6 +12,15 @@ import java.util.List;
  * Time: AM 5:21
  */
 public interface IArticleService {
+
+    /**
+     *
+     * @param article
+     * @param tags
+     * @throws Exception
+     */
+    public void saveArticle(ArticleBean article, String tags) throws Exception;
+
 
     /**
      * save article interface

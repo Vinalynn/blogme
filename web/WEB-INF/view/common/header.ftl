@@ -2,23 +2,18 @@
 <style>
     #blog_header{
         width: 100%;
-        /*font-size: 11pt;*/
-        /*padding-top: 15px;*/
     }
     #blog_header #sitename-td{
         padding:4px 0 4px 0;
         line-height: 1em;
-        /*font-size: 11pt;*/
     }
     #blogname{
-        font-family: 'Source Code Pro', sans-serif;
         text-decoration: none;
         font-size: 30pt;
         font-style: italic;
         color:#000088;
     }
     #blogname h1{
-        /*padding-bottom: -10px;*/
         display: block;
         font-size: 2em;
         -webkit-margin-before: 0.67em;
@@ -26,12 +21,10 @@
         -webkit-margin-start: 0px;
         -webkit-margin-end: 0px;
         font-weight: normal;
-        /*line-height: 50px;*/
     }
 
     #nav-bar{
         width: 100%;
-        /*height: auto;*/
         display: inline-block;
         background-color: #198601;
         border-radius: 8px 0;
@@ -54,8 +47,6 @@
     }
     #blog_header #nav-bar li:hover{
         display:block;background:dimgray;
-        /*-moz-opacity:.90;*/
-        /*opacity:0.9*/
     }
 
     #blog_header #nav-bar li a{
@@ -64,7 +55,6 @@
         padding: 4px 6px;
         margin: 0;
         font-size: 13px;
-        /*font-weight: bold;*/
         display: block;
         text-shadow: 1px 1px 2px #333;
         z-index: 999;
@@ -89,8 +79,8 @@
         </tr>
         <tr>
              <td>
-                 <a style="font-size: 14px;padding-left: 10px;">
-                     Articles, tutorials and news on technologies for Highly Scalable Systems.</a>
+                 <a style="font-size: 14px;padding-left: 5px;color: #808080">
+                     Articles, tutorials and news on technologies.</a>
              </td>
         </tr>
     </table>
@@ -99,6 +89,7 @@
         <ul style="margin-left: 8px">
             <li><a href="#" >主页</a></li>
             <li><a href="#">新闻</a></li>
+            <li><a href="#">专题</a></li>
             <li><a href="#">关于</a></li>
             <li><a href="#">订阅</a></li>
         </ul>

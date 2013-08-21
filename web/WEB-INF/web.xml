@@ -46,6 +46,14 @@
         <servlet-name>servlet_dispatcher</servlet-name>
         <url-pattern>*.request</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servlet_dispatcher</servlet-name>
+        <url-pattern>*.cgi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>servlet_dispatcher</servlet-name>
+        <url-pattern>*.re</url-pattern>
+    </servlet-mapping>
     <!-- spring mvc config -->
 
 

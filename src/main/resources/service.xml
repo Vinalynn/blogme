@@ -3,6 +3,53 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="iArticleService" class="org.vinalynn.wapp.wmblog.service.impl.ArticleServiceImpl"/>
+ <!--   <bean id="iArticleService" class="org.vinalynn.wapp.wmblog.service.impl.ArticleServiceImpl"/>
+    <bean id="iDataInitService" class="org.vinalynn.wapp.wmblog.service.impl.DataInitServiceImpl"/>
+-->
+    <bean id="articleServiceImpl" class="org.vinalynn.wapp.wmblog.service.impl.ArticleServiceImpl">
+        <property name="iTagService" ref="iTagService"/>
+        <property name="iEntityRelationService" ref="iEntityRelationService"/>
+    </bean>
+    <bean id="tagServiceImpl" class="org.vinalynn.wapp.wmblog.service.impl.TagServiceImpl"/>
+    <bean id="entityRelationServiceImpl" class="org.vinalynn.wapp.wmblog.service.impl.EntityRelationServiceImpl"/>
 
+
+
+    <bean id="iDataInitService" class="org.vinalynn.wapp.wmblog.service.impl.DataInitServiceImpl"/>
+
+    <bean id="iArticleService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces"
+                  value="org.vinalynn.wapp.wmblog.service.interfaces.IArticleService"/>
+        <property name="target" ref="articleServiceImpl"/>
+
+        <property name="interceptorNames">
+            <list>
+                <value>svTransactionInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="iTagService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces"
+                  value="org.vinalynn.wapp.wmblog.service.interfaces.ITagService"/>
+        <property name="target" ref="tagServiceImpl"/>
+
+        <property name="interceptorNames">
+            <list>
+                <value>svTransactionInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="iEntityRelationService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces"
+                  value="org.vinalynn.wapp.wmblog.service.interfaces.IEntityRelationService"/>
+        <property name="target" ref="entityRelationServiceImpl"/>
+
+        <property name="interceptorNames">
+            <list>
+                <value>svTransactionInterceptor</value>
+            </list>
+        </property>
+    </bean>
 </beans>
