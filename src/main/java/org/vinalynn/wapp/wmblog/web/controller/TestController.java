@@ -35,11 +35,11 @@ public class TestController {
     @RequestMapping(value = "/test-main.request")
     public String testMain(HttpServletRequest request, Model model) throws Exception {
 
-        //testSaveSingleObject();
+        testSaveSingleObject();
         //getArticle();
         //getArticleByUUID();
         //model.addAttribute(GlobalConst.FTL_COMMON_MSG_KEY, getArticle());
-        getArticleByCondition();
+        //getArticleByCondition();
         return GlobalConst.FTL_COMMON_INDEX;
     }
 
@@ -52,6 +52,7 @@ public class TestController {
         articleBean.setCreateDate(new Date(System.currentTimeMillis()));
         articleBean.setState("U");
         articleBean.setUrl("/this-is-test.html");
+        this.iArticleService.saveArticleWithUUIDRtn(articleBean);
         this.iArticleService.saveArticleWithUUIDRtn(articleBean);
     }
 
@@ -72,7 +73,13 @@ public class TestController {
 
     private void getArticleByCondition() throws Exception{
         List<ArticleBean> lists =
-        this.iArticleService.getArticles(0, 10, "createDate", Query.SortDirection.DESCENDING);
+                this.iArticleService.getArticles(0, 10, "createDate", Query.SortDirection.DESCENDING);
+        List<ArticleBean> lists2 =
+                this.iArticleService.getArticles(0, 10, "createDate", Query.SortDirection.DESCENDING);
+        List<ArticleBean> lists3 =
+                this.iArticleService.getArticles(0, 10, "createDate", Query.SortDirection.DESCENDING);
+        List<ArticleBean> lists4 =
+                this.iArticleService.getArticles(0, 10, "createDate", Query.SortDirection.DESCENDING);
         log.error(lists);
     }
 

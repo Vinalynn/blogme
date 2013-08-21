@@ -8,11 +8,32 @@
 body{
     /* font:11pt Cantarell,'Droid Sans',Verdana,sans-serif; */
     /* font:11pt Arial,sans-serif; */
-    font-size:10pt;
+    font-size:12px;
     /*font-family: "Palatino Linotype", *//* Windows *//* "URW Palladio L", *//* Unix+FontConfig (ugly!) *//* "palladio l", *//* Unix+X+FreeType *//* palatino, *//* MacOS *//* "book antiqua", *//* Win95 *//* *//* Fallback options *//* times, *//* Unix+X, MacOS *//* serif;*/
-    font-family: "Source Sans Pro", sans-serif;
+    /*font-family: "Source Sans Pro", sans-serif;*/
+    /*font-family: "arial",sans-serif;*/
+    /*font-family: 'Quintessential', sans-serif, sans-serif;*/
     background:#333;
 }
+
+td, th{
+    display: table-cell;
+    vertical-align: inherit;
+}
+
+table{
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: gray;
+}
+
+body,a, span, div, input{
+    font-family: 'Microsoft Yahei', 'Microsoft Jhenghei', 'STHeiti', 'PMingLiU', 'Simsun', sans-serif;
+}
+
+
+.heiti { font-family: "simhei",sans-serif }
+.yahei { font-family: "Microsoft YaHei",sans-serif }
 
 a:link, a:visited{
     text-decoration: none;
@@ -40,10 +61,86 @@ body {
 }
 
 .clearfloat{
-    float: none;
+    clear: both;
     display: block;
+}
+
+.clearright{
+    clear: right;
 }
 
 .left{
     float: left;
+}
+
+#main-left{
+    float: left;
+    /*background: green;*/
+    width: 560px;
+    padding: 8px 40px 8px 8px;
+}
+
+#main-right{
+    width: 312px;
+    padding: 8px 5px 5px 5px;
+    /*background: red;*/
+    float: left;
+}
+
+.main-wrapper{
+    margin: 0;
+    padding: 0;
+}
+
+.main-wrapper .article-item{
+    margin-top:10px;
+}
+
+.main-wrapper .article-item h1{
+    font-weight: bold;
+    font-size: 16px;
+    color: darkslategray;
+    border-bottom: 3px lightgray solid;
+}
+
+/*.post_area input{*/
+    /*border: none;*/
+    /*width: 100%;*/
+    /*background:transparent;*/
+/*}*/
+
+.d_input_default{
+    float: left;
+    border: 1px solid gray;
+    background: whitesmoke;
+    width: 300px;
+    height: 30px;
+}
+
+.d_input_400px{
+    float: left;
+    border: 1px solid gray;
+    background: whitesmoke;
+    width: 400px;
+    height: 30px;
+    padding-left: 10px;
+}
+
+.d_input_default input, .d_input_400px input{
+    border:none;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+}
+
+.font_size_20{
+    font-size: 20px;
+}
+
+.font_size_19{
+    font-size: 19px;
+}
+
+.td_font_size_default{
+    font-size: 16px;
 }

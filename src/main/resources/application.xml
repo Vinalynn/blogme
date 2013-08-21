@@ -16,4 +16,7 @@
             </list>
         </property>
     </bean>
+
+    <bean id="svTransactionInterceptor"
+          class="org.vinalynn.wapp.wmblog.service.interceptor.SvTransactionInterceptor"/>
 </beans>
